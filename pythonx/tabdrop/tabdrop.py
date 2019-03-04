@@ -1,29 +1,37 @@
 import vim
 
-back_dict = {}
-
 
 def tabdrop(path):
     for tab in vim.tabpages:
         for window in tab.windows:
             if window.buffer.name == path:
-                back_dict[path] = vim.current.buffer.name
                 vim.command("tabnext {}".format(tab.number))
                 return
-    back_dict[path] = vim.current.buffer.name
     vim.command("tabedit {}".format(path))
 
 
-def back_to_last_tab():
-    path = back_dict.pop(vim.current.buffer.name, None)
-    if not path:
+tags = []
+
+
+def tabdrop_push_tag():
+    tags.append((vim.current.buffer.name, vim.eval('line(".")'),
+                 vim.eval('col(".")')))
+
+
+def tabdrop_pop_tag():
+    if len(tags) == 0:
         return
-    if vim.eval('g:tabdrop_close_on_back') == '1':
-        print(vim.eval('g:tabdrop_close_on_back') == '1')
-        vim.command('close')
+    path, line, col = tags.pop()
 
     for tab in vim.tabpages:
         for window in tab.windows:
             if window.buffer.name == path:
+                if vim.eval(
+                        'g:tabdrop_close_on_poptag'
+                ) == '1' and tab.number != vim.current.tabpage.number:
+                    vim.command('close')
+
                 vim.command("tabnext {}".format(tab.number))
+                vim.command('normal! {}G'.format(line))
+                vim.command('normal! {}|'.format(col))
                 return

@@ -6,11 +6,11 @@ let g:loaded_tabdrop = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-exec "python3 from tabdrop.tabdrop import tabdrop"
-exec "python3 from tabdrop.tabdrop import back_to_last_tab"
+exec "python3 from tabdrop.tabdrop import tabdrop, tabdrop_push_tag, tabdrop_pop_tag"
 command! -nargs=1 -complete=file Tabdrop exec 'python3 tabdrop("'.fnamemodify("<args>", ":p").'")'
+command! TabdropPushTag exec 'python3 tabdrop_push_tag()'
+command! TabdropPopTag exec 'python3 tabdrop_pop_tag()'
 
-let g:tabdrop_close_on_back = get(g:, 'tabdrop_close_on_back', 1)
-nnoremap <silent><Plug>(TabdropBack) :exec 'python3 back_to_last_tab()'<Cr>
+let g:tabdrop_close_on_poptag = get(g:, 'tabdrop_close_on_poptag', 1)
 
 let &cpo = s:save_cpo
