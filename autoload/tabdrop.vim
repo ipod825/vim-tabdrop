@@ -1,3 +1,14 @@
+function! tabdrop#newtabdrop(...)
+    let l:num_tabpages = tabpagenr()
+    if l:num_tabpages>1
+        tabclose
+        call call(function("tabdrop#tabdrop"), a:000)
+    else
+        call call(function("tabdrop#tabdrop"), a:000)
+        tabclose 1
+    endif
+endfunction
+
 function! tabdrop#tabdrop(...)
     if a:0 ==0
         tabedit

@@ -6,7 +6,7 @@ Install either with [vim-plug](https://github.com/junegunn/vim-plug), [Vundle](h
 ### Usage
 This plugin provides enhanced version of the built-in `:tab drop` command (if the file is already open in a tab then vim will switch to that tab instead of opening a new window). You can:
 1. Run `:Tabdrop path_to_open [line#], [col#]` to open specified path. Pass the optional line and column number if you want to jump to certain line and column.
-2. Alternatively, use `call tabdrop#tabdrop(path, line#, col#)`.
+2. Run `:NewTabdrop path_to_open [line#], [col#]` to perform exact the thing as `Tabdrop` except that the content in the current tab will always be hidden after drop. This might be useful for e.g. in [vim-esearch](https://github.com/eugen0329/vim-esearch).
 3. Run `:TabdropPushTag` to save the current location in a stack
 4. Run `:TabdropPopTag` to jump back to the last location
 
