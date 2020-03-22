@@ -6,7 +6,8 @@ let g:loaded_tabdrop = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-command! -nargs=1 -complete=file Tabdrop exec 'call tabdrop#tabdrop("' . <q-args> .'")'
+command! -nargs=* -complete=file Tabdrop exec 'call tabdrop#tabdrop(<f-args>)'
+
 command! TabdropPushTag exec 'call tabdrop#push_tag()'
 command! TabdropPopTag exec 'call tabdrop#pop_tag()'
 

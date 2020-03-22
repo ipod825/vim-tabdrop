@@ -1,4 +1,4 @@
-function! tabdrop#tabdrop(path)
+function! tabdrop#tabdrop(path,...)
     let l:path = a:path
     if len(l:path)>0
         let l:path = fnamemodify(l:path, ":p")
@@ -6,15 +6,26 @@ function! tabdrop#tabdrop(path)
         tabnew
         return
     endif
-    for t in range(1, tabpagenr('$'))
-        for b in tabpagebuflist(t)
-            if fnamemodify(bufname(b), ":p") == l:path
-                exec "tabnext " . t
-                return
-            endif
-        endfor
-    endfor
-    exec "tabedit " . l:path
+
+    let l:bufnr = bufnr(l:path)
+    if l:bufnr>0
+        let l:win_ids = win_findbuf(l:bufnr)
+        echo l:win_ids
+        if len(l:win_ids)>0
+            call win_gotoid(l:win_ids[0])
+        else
+            exec "tabedit " . l:path
+        endif
+    else
+        exec "tabedit " . l:path
+    endif
+
+    if a:0>0
+        exec 'normal! '.a:1.'G'
+    endif
+    if a:0>1
+        exec 'normal! '.a:2.'|'
+    endif
 endfunction
 
 
