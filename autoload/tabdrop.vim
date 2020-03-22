@@ -1,16 +1,24 @@
-function! tabdrop#tabdrop(path,...)
-    let l:path = a:path
+function! tabdrop#tabdrop(...)
+    if a:0 ==0
+        tabedit
+        return
+    endif
+
+    let l:path = a:1
     if len(l:path)>0
         let l:path = fnamemodify(l:path, ":p")
     else
         tabnew
         return
     endif
+    if isdirectory(l:path)
+        exe 'tabedit '.l:path
+        return
+    endif
 
     let l:bufnr = bufnr(l:path)
     if l:bufnr>0
         let l:win_ids = win_findbuf(l:bufnr)
-        echo l:win_ids
         if len(l:win_ids)>0
             call win_gotoid(l:win_ids[0])
         else
@@ -20,11 +28,11 @@ function! tabdrop#tabdrop(path,...)
         exec "tabedit " . l:path
     endif
 
-    if a:0>0
-        exec 'normal! '.a:1.'G'
-    endif
     if a:0>1
-        exec 'normal! '.a:2.'|'
+        exec 'normal! '.a:2.'G'
+    endif
+    if a:0>2
+        exec 'normal! '.a:3.'|'
     endif
 endfunction
 
