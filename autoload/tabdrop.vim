@@ -9,6 +9,16 @@ function! tabdrop#newtabdrop(...)
     endif
 endfunction
 
+function! tabdrop#tagtabdrop(...) abort
+    execute 'tab tag '.expand('<cword>')
+    let l:target=expand('%:p')
+    let l:line = line('.')
+    let l:col = col('.')
+    quit
+    call tabdrop#tabdrop(l:target, l:line, l:col)
+    call feedkeys("\<esc>")
+endfunction
+
 function! tabdrop#tabdrop(...)
     if a:0 ==0
         tabedit
