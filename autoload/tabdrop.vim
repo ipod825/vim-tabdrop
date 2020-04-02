@@ -10,20 +10,23 @@ function! tabdrop#newtabdrop(...)
 endfunction
 
 function! tabdrop#tagtabdrop(...) abort
-    let l:orig_target=expand('%:p')
-    let l:orig_line = line('.')
-    let l:orig_col = col('.')
-    execute 'tab tjump '.expand('<cword>')
-    let l:target=expand('%:p')
-    let l:line = line('.')
-    let l:col = col('.')
-
-    if l:orig_target == l:target && l:orig_line == l:line && l:orig_col == l:col
+    let l:num_tag = len(taglist(expand('<cword>')))
+    if l:num_tag == 0
+        execute 'tag '.expand('<cword>')
         return
+    elseif l:num_tag == 1
+        execute 'tab tag '.expand('<cword>')
+        let l:target=expand('%:p')
+        let l:line = line('.')
+        let l:col = col('.')
+        quit
+        call tabdrop#tabdrop(l:target, l:line, l:col)
+        call feedkeys("\<esc>")
+    else
+        execute 'ltag '.expand('<cword>')
+        pop
+        lopen
     endif
-    quit
-    call tabdrop#tabdrop(l:target, l:line, l:col)
-    call feedkeys("\<esc>")
 endfunction
 
 function! tabdrop#tabdrop(...)
@@ -64,6 +67,24 @@ function! tabdrop#tabdrop(...)
     endif
 endfunction
 
+function! tabdrop#qftabdrop()
+    redir @">
+    file
+    redir END
+    let l:entry=""
+    if @"=~'Quickfix List'
+        let l:entry = getqflist()[line(".")-1]
+    elseif @"=~"Location List"
+        let l:entry = getloclist(win_getid())[line(".")-1]
+    else
+        echoerr "QfTabdrop only works in quickfix list."
+        return
+    endif
+    quit
+    execute "Tabdrop ".bufname(l:entry.bufnr)
+    exec "normal! ".l:entry.lnum."G"
+    exec "normal! ".l:entry.col."|"
+endfunction
 
 let s:tags = []
 function! tabdrop#push_tag()
