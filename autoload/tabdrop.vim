@@ -10,10 +10,17 @@ function! tabdrop#newtabdrop(...)
 endfunction
 
 function! tabdrop#tagtabdrop(...) abort
-    execute 'tab tag '.expand('<cword>')
+    let l:orig_target=expand('%:p')
+    let l:orig_line = line('.')
+    let l:orig_col = col('.')
+    execute 'tab tjump '.expand('<cword>')
     let l:target=expand('%:p')
     let l:line = line('.')
     let l:col = col('.')
+
+    if l:orig_target == l:target && l:orig_line == l:line && l:orig_col == l:col
+        return
+    endif
     quit
     call tabdrop#tabdrop(l:target, l:line, l:col)
     call feedkeys("\<esc>")
