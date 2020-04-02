@@ -34,13 +34,16 @@ function! Gotodef()
         call LanguageClient_textDocument_definition({'gotoCmd': 'Tabdrop'})
     endtry
 endfunction
+```
+Note that `TagTabdrop` uses `tjump` internally, so vim will prompt a menu for you to select if there are multiple tag matches.
 
+To drop to the target in a quickfix/location list, put the following snippet in your `vimrc`.
+```vim
 augroup TABDROP
     autocmd!
     autocmd FileType qf nnoremap <buffer> <cr> :QfTabdrop<cr>
 augroup END
 ```
-Note that the auto command is needed if multiple tags are found. In such case, `TagTabdrop` will open the location list for you to select the target file. `QfTabdrop` then enables you to drop to the target when you hit return in the location list.
 
 ### Customization
 By default, if the target tab is different than the current tab, vim-tabdrop close the current tab on `TabdropPopTag` command. To prevent from this, add the following snippet in your vimrc

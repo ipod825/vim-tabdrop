@@ -10,23 +10,20 @@ function! tabdrop#newtabdrop(...)
 endfunction
 
 function! tabdrop#tagtabdrop(...) abort
-    let l:num_tag = len(taglist(expand('<cword>')))
-    if l:num_tag == 0
-        execute 'tag '.expand('<cword>')
+    let l:orig_target=expand('%:p')
+    let l:orig_line = line('.')
+    let l:orig_col = col('.')
+    execute 'tab tjump '.expand('<cword>')
+    let l:target=expand('%:p')
+    let l:line = line('.')
+    let l:col = col('.')
+
+    if l:orig_target == l:target && l:orig_line == l:line && l:orig_col == l:col
         return
-    elseif l:num_tag == 1
-        execute 'tab tag '.expand('<cword>')
-        let l:target=expand('%:p')
-        let l:line = line('.')
-        let l:col = col('.')
-        quit
-        call tabdrop#tabdrop(l:target, l:line, l:col)
-        call feedkeys("\<esc>")
-    else
-        execute 'ltag '.expand('<cword>')
-        pop
-        lopen
     endif
+    quit
+    call tabdrop#tabdrop(l:target, l:line, l:col)
+    call feedkeys("\<esc>")
 endfunction
 
 function! tabdrop#tabdrop(...)
