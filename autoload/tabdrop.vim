@@ -5,7 +5,9 @@ function! tabdrop#newtabdrop(...)
         call call(function("tabdrop#tabdrop"), a:000)
     else
         call call(function("tabdrop#tabdrop"), a:000)
-        tabclose 1
+        if tabpagenr() > 1
+            tabclose 1
+        endif
     endif
 endfunction
 
