@@ -15,7 +15,16 @@ function! tabdrop#tagtabdrop(...) abort
     let l:orig_target=expand('%:p')
     let l:orig_line = line('.')
     let l:orig_col = col('.')
-    execute 'tab tjump '.expand('<cword>')
+
+    let l:candidate = map(taglist(expand('<cword>')), "v:val['filename']")
+    let l:extra_candidate = filter(l:candidate, "v:val != '".l:candidate[0]."'")
+
+    " if all the target is in the same file, possibly there are duplicate tags.
+    if len(l:extra_candidate) > 0
+        execute 'tab tjump '.expand('<cword>')
+    else
+        execute 'tab tag '.expand('<cword>')
+    endif
     let l:target=expand('%:p')
     let l:line = line('.')
     let l:col = col('.')
