@@ -17,7 +17,10 @@ function! tabdrop#tagtabdrop(...) abort
     let l:orig_col = col('.')
 
     let l:candidate = map(taglist(expand('<cword>')), "v:val['filename']")
-    let l:extra_candidate = filter(l:candidate, "v:val != '".l:candidate[0]."'")
+    let l:extra_candidate = []
+    if len(l:candidate)>0
+        let l:extra_candidate = filter(l:candidate, "v:val != '".l:candidate[0]."'")
+    endif
 
     " if all the target is in the same file, possibly there are duplicate tags.
     if len(l:extra_candidate) > 0
