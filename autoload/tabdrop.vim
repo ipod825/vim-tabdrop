@@ -110,17 +110,22 @@ function! tabdrop#pop_tag()
     let l:line = l:pos[1]
     let l:col = l:pos[2]
 
-    for t in range(1, tabpagenr('$'))
-        for b in tabpagebuflist(t)
-            if fnamemodify(bufname(b), ":p") == l:path
-                if eval('g:tabdrop_close_on_poptag') == 1 && t!=tabpagenr()
-                    close
-                endif
-                exec "tabnext " . t
-                exec "normal! ".l:line."G"
-                exec "normal! ".l:col."|"
-                return
-            endif
-        endfor
-    endfor
+    if eval('g:tabdrop_close_on_poptag') == 1
+        " unhandeled corner case: only one tab with one window is left
+        close
+    endif
+
+    let l:bufnr = bufnr(l:path)
+    if l:bufnr>0
+        let l:win_ids = win_findbuf(l:bufnr)
+        if len(l:win_ids)>0
+            call win_gotoid(l:win_ids[0])
+        else
+            exec "tabedit " . l:path
+        endif
+    else
+        exec "tabedit " . l:path
+    endif
+    exec "normal! ".l:line."G"
+    exec "normal! ".l:col."|"
 endfunction
