@@ -78,25 +78,6 @@ function! tabdrop#tabdrop(...)
     endif
 endfunction
 
-function! tabdrop#qftabdrop()
-    redir @">
-    file
-    redir END
-    let l:entry=""
-    if @"=~'Quickfix List'
-        let l:entry = getqflist()[line(".")-1]
-    elseif @"=~"Location List"
-        let l:entry = getloclist(win_getid())[line(".")-1]
-    else
-        echoerr "QfTabdrop only works in quickfix list."
-        return
-    endif
-    quit
-    execute "Tabdrop ".bufname(l:entry.bufnr)
-    exec "normal! ".l:entry.lnum."G"
-    exec "normal! ".l:entry.col."|"
-endfunction
-
 let s:tags = []
 function! tabdrop#push_tag()
     call add(s:tags, [expand('%:p'), line('.'), col('.')])

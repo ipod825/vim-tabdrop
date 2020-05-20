@@ -10,7 +10,6 @@ This plugin provides enhanced version of the built-in `:tab drop` command (if th
 3. Run `:TabdropPushTag` to save the current location in a stack
 4. Run `:TabdropPopTag` to jump back to the last location
 5. Run `:TagTabdrop` to follow tags of word-under-cursor in a new/existing tabpage.
-6. Run `:QfTabdrop` to open target-under-cursor in a quickfix/location list
 
 For example, if you use [LanguageClient-neovim](https://github.com/autozimu/LanguageClient-neovim) to do code traversal, having the following config in your vimrc you can jump to function definition in a new (or existing) tab by pressing `Ctrl+]` and jump back by pressing `Ctrl-t`.
 
@@ -36,14 +35,6 @@ function! Gotodef()
 endfunction
 ```
 Note that `TagTabdrop` uses `tjump` internally, so vim will prompt a menu for you to select if there are multiple tag matches.
-
-To drop to the target in a quickfix/location list, put the following snippet in your `vimrc`.
-```vim
-augroup TABDROP
-    autocmd!
-    autocmd FileType qf nnoremap <buffer> <cr> :QfTabdrop<cr>
-augroup END
-```
 
 ### Customization
 By default, if the target tab is different than the current tab, vim-tabdrop close the current tab on `TabdropPopTag` command. To prevent from this, add the following snippet in your vimrc
