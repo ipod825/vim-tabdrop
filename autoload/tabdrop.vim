@@ -53,10 +53,6 @@ function! tabdrop#tabdrop(...)
         tabnew
         return
     endif
-    if isdirectory(l:path)
-        exe 'tabedit '.l:path
-        return
-    endif
 
     let l:bufnr = bufnr(l:path)
     if l:bufnr>0
