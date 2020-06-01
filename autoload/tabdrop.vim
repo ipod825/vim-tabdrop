@@ -48,10 +48,7 @@ function! tabdrop#tabdrop(...)
 
     let l:path = a:1
     if len(l:path)>0
-        let l:path = fnamemodify(l:path, ":p")
-        if l:path[len(l:path)-1] == '/'
-            let l:path = l:path[:len(l:path)-2]
-        endif
+        let l:path = fnamemodify(l:path, "%:p")
     else
         tabnew
         return
