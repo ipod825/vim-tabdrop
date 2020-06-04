@@ -47,14 +47,27 @@ function! tabdrop#tabdrop(...)
     endif
 
     let l:path = a:1
-    if len(l:path)>0
-        let l:path = fnamemodify(l:path, "%:p")
+    if isdirectory(l:path)
+        let l:bufnr = -1
+        let l:path = fnamemodify(l:path, ":p")
+        let l:path = l:path[:len(l:path)-2]
+        for n in range(1, bufnr('$'))
+            if bufname(n) =~ l:path.'/\?'
+                let l:bufnr = n
+                break
+            endif
+        endfor
     else
-        tabnew
-        return
+        if len(l:path)>0
+            let l:path = fnamemodify(l:path, "%:p")
+        else
+            tabnew
+            return
+        endif
+        let l:bufnr = bufnr(l:path)
     endif
 
-    let l:bufnr = bufnr(l:path)
+
     if l:bufnr>0
         let l:win_ids = win_findbuf(l:bufnr)
         if len(l:win_ids)>0
