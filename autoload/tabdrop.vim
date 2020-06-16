@@ -52,7 +52,7 @@ function! tabdrop#tabdrop(...)
         let l:path = fnamemodify(l:path, ":p")
         let l:path = l:path[:len(l:path)-2]
         for n in range(1, bufnr('$'))
-            if bufname(n) =~ l:path.'/\?'
+            if bufname(n) == l:path
                 let l:bufnr = n
                 break
             endif
