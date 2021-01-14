@@ -103,7 +103,7 @@ function! tabdrop#pop_tag()
     let l:line = l:pos[1]
     let l:col = l:pos[2]
 
-    if eval('g:tabdrop_close_on_poptag') == 1
+    if eval('g:tabdrop_close_on_poptag') == 1 && len(tabpagebuflist())==1
         " unhandeled corner case: only one tab with one window is left
         close
     endif

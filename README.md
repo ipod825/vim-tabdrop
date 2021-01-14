@@ -37,7 +37,7 @@ endfunction
 Note that `TagTabdrop` uses `tjump` internally, so vim will prompt a menu for you to select if there are multiple tag matches.
 
 ### Customization
-By default, if the target tab is different than the current tab, vim-tabdrop close the current tab on `TabdropPopTag` command. To prevent from this, add the following snippet in your vimrc
+By default, if the target tabpage is different than the current tabpage and only one window exists in the current tabpage, vim-tabdrop close the current tab on `TabdropPopTag` command. To prevent from this, add the following snippet in your vimrc
 
 ```vim
 let g:tabdrop_close_on_poptag=0
