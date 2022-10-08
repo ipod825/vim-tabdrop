@@ -59,7 +59,7 @@ function! tabdrop#tabdrop(...)
         endfor
     else
         if len(l:path)>0
-            let l:path = fnamemodify(l:path, "%:p")
+            let l:path = fnamemodify(l:path, ":p")
         else
             tabnew
             return
